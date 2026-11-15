@@ -116,14 +116,24 @@
     ]}}
   ];
   const projectModal = $("#projectModal");
-  let activeProject = null;
+  const companyProfiles = [
+    {en:{kicker:"AK GROUP · OCT 2025 — PRESENT",title:"Organizational Development Supervisor",projects:[0,1,2,3,4,5]},ar:{kicker:"مجموعة العقاد · أكتوبر 2025 — حتى الآن",title:"مشرف التطوير المؤسسي",projects:[0,1,2,3,4,5]}},
+    {en:{kicker:"FATHALLA MARKETS · OCT 2019 — AUG 2024",title:"Recruitment, Organizational Development & Training",projects:[6,7,8]},ar:{kicker:"فتح الله ماركتس · أكتوبر 2019 — أغسطس 2024",title:"التوظيف والتطوير المؤسسي والتدريب",projects:[6,7,8]}},
+    {en:{kicker:"ASH GROUP · OCT 2021 — PRESENT · PART-TIME",title:"HR Business Partner · Integrated HR & OD",projects:[9]},ar:{kicker:"مجموعة ASH · أكتوبر 2021 — حتى الآن · دوام جزئي",title:"شريك أعمال الموارد البشرية · أنظمة الموارد البشرية والتطوير المؤسسي",projects:[9]}},
+    {en:{kicker:"MAHONEY · AUG 2024 — OCT 2025",title:"Organizational Development Specialist",groups:[["Organizational Development",["Experience across organizational development activities, including organizational structures, job descriptions, policies and process documentation, performance, competency, and talent initiatives."]]]},ar:{kicker:"ماهوني · أغسطس 2024 — أكتوبر 2025",title:"أخصائي التطوير المؤسسي",groups:[["التطوير المؤسسي",["خبرة في مجالات التطوير المؤسسي، بما يشمل الهياكل التنظيمية والأوصاف الوظيفية والسياسات وتوثيق العمليات والأداء والجدارات ومبادرات إدارة المواهب."]]]}}
+  ];
+  const projectModal = $("#projectModal");
+  let activeCompany = null;
   function renderProjectDetails() {
-    if (!projectModal || activeProject === null) return;
+    if (!projectModal || activeCompany === null) return;
     const lang = document.documentElement.lang === "ar" ? "ar" : "en";
-    const item = projectDetails[activeProject][lang];
-    $("#projectModalKicker").textContent = item.kicker;
-    $("#projectModalTitle").textContent = item.title;
-    $("#projectModalBody").innerHTML = item.groups.map(group =>
+    const company = companyProfiles[activeCompany][lang];
+    $("#projectModalKicker").textContent = company.kicker;
+    $("#projectModalTitle").textContent = company.title;
+    const groups = company.groups ? company.groups : company.projects.flatMap(index =>
+      projectDetails[index][lang].groups.map(group => [projectDetails[index][lang].title + " · " + group[0], group[1]])
+    );
+    $("#projectModalBody").innerHTML = groups.map(group =>
       "<section class='project-detail-group'><h4>" + group[0] + "</h4><ul>" +
       group[1].map(point => "<li>" + point + "</li>").join("") +
       "</ul></section>"
@@ -134,43 +144,36 @@
     projectModal.classList.remove("is-open");
     projectModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
-    activeProject = null;
+    activeCompany = null;
   }
-  function openProject(card) {
+  function openCompany(card) {
     if (!projectModal || !card) return;
-    const projectIndex = Number(card.dataset.project);
-    if (!Number.isInteger(projectIndex) || !projectDetails[projectIndex]) return;
-    activeProject = projectIndex;
+    const companyIndex = Number(card.dataset.company);
+    if (!Number.isInteger(companyIndex) || !companyProfiles[companyIndex]) return;
+    activeCompany = companyIndex;
     renderProjectDetails();
     projectModal.classList.add("is-open");
     projectModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
     $(".project-modal-close", projectModal).focus();
   }
-  // Use delegated events so project cards remain interactive even if their
-  // inner content is updated by the language switch or other page scripts.
   document.addEventListener("click", event => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
-    const card = target.closest("[data-project]");
+    const card = target.closest("[data-company]");
     if (card) {
       if (target.closest("a")) return;
-      openProject(card);
+      openCompany(card);
     }
   });
   document.addEventListener("keydown", event => {
     if (event.key !== "Enter" && event.key !== " ") return;
     const target = event.target instanceof Element ? event.target : null;
-    const card = target?.closest("[data-project]");
+    const card = target?.closest("[data-company]");
     if (card && target === card) {
       event.preventDefault();
-      openProject(card);
+      openCompany(card);
     }
-  });
-  $$("[data-project]").forEach(card => {
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("role", "button");
-    card.setAttribute("aria-haspopup", "dialog");
   });
   $$("[data-modal-close]").forEach(el => el.addEventListener("click", closeProjectModal));
   document.addEventListener("keydown", event => {
