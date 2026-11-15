@@ -161,7 +161,7 @@
     if (closeButton) closeButton.focus();
   }
   // Bind directly to each company card; clicks on any nested content open the same dialog.
-  $(".company-card[data-company]").forEach(card => {
+  $$(".company-card[data-company]").forEach(card => {
     card.addEventListener("click", event => {
       if (event.target.closest("[data-modal-close]")) return;
       openCompany(card);
