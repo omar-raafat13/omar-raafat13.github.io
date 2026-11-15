@@ -3,6 +3,7 @@
   const $ = (selector, root=document) => root.querySelector(selector);
   const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
   const langToggle = $("#langToggle");
+  $(".mobile-nav a").forEach(link => link.addEventListener("click", () => { const menu = link.closest(".mobile-nav"); if (menu) menu.open = false; }));
   const year = $("#year");
   if (year) year.textContent = new Date().getFullYear();
 
