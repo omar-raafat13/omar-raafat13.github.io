@@ -123,6 +123,7 @@
     {en:{kicker:"MAHONEY · AUG 2024 — OCT 2025",title:"Organizational Development Specialist",groups:[["Organizational Development",["Experience across organizational development activities, including organizational structures, job descriptions, policies and process documentation, performance, competency, and talent initiatives."]]]},ar:{kicker:"ماهوني · أغسطس 2024 — أكتوبر 2025",title:"أخصائي التطوير المؤسسي",groups:[["التطوير المؤسسي",["خبرة في مجالات التطوير المؤسسي، بما يشمل الهياكل التنظيمية والأوصاف الوظيفية والسياسات وتوثيق العمليات والأداء والجدارات ومبادرات إدارة المواهب."]]]}}
   ];
   const projectModal = $("#projectModal");
+  if (projectModal && projectModal.parentElement !== document.body) document.body.appendChild(projectModal);
   let activeCompany = null;
   function renderProjectDetails() {
     if (!projectModal || activeCompany === null) return;
@@ -158,19 +159,18 @@
     const closeButton = $(".project-modal-close", projectModal);
     if (closeButton) closeButton.focus();
   }
-  // Delegated click handling supports clicks on any child within each card.
-  document.addEventListener("click", event => {
-    const target = event.target instanceof Element ? event.target : null;
-    const card = target && target.closest(".company-card[data-company]");
-    if (card) openCompany(card);
-  });
-  document.addEventListener("keydown", event => {
-    const target = event.target instanceof Element ? event.target : null;
-    const card = target && target.closest(".company-card[data-company]");
-    if (card && (event.key === "Enter" || event.key === " ")) {
-      event.preventDefault();
+  // Restore direct card handlers used by the original working interaction.
+  $(".company-card[data-company]").forEach(card => {
+    card.addEventListener("click", event => {
+      if (event.target.closest("[data-modal-close]")) return;
       openCompany(card);
-    }
+    });
+    card.addEventListener("keydown", event => {
+      if (event.target === card && (event.key === "Enter" || event.key === " ")) {
+        event.preventDefault();
+        openCompany(card);
+      }
+    });
   });
   $$("[data-modal-close]").forEach(el => el.addEventListener("click", closeProjectModal));
   document.addEventListener("keydown", event => {
