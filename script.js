@@ -136,15 +136,29 @@
     document.body.classList.remove("modal-open");
     activeProject = null;
   }
-  $(".project-open").forEach(button => button.addEventListener("click", () => {
-    const card = button.closest("[data-project]");
+  function openProject(card) {
     activeProject = Number(card.dataset.project);
     renderProjectDetails();
     projectModal.classList.add("is-open");
     projectModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
-    $("[data-modal-close]", projectModal).focus();
-  }));
+    $(".project-modal-close", projectModal).focus();
+  }
+  $("[data-project]").forEach(card => {
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-haspopup", "dialog");
+    card.addEventListener("click", event => {
+      if (event.target.closest("a")) return;
+      openProject(card);
+    });
+    card.addEventListener("keydown", event => {
+      if ((event.key === "Enter" || event.key === " ") && event.target === card) {
+        event.preventDefault();
+        openProject(card);
+      }
+    });
+  });
   $("[data-modal-close]").forEach(el => el.addEventListener("click", closeProjectModal));
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && projectModal?.classList.contains("is-open")) closeProjectModal();
