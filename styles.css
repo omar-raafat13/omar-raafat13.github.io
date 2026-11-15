@@ -198,3 +198,56 @@ body[dir=rtl] .project-modal-panel h3{line-height:1.5}
 body.modal-open{overflow:hidden}
 @media(max-width:680px){.project-modal{padding:10px}.project-modal-panel{max-height:92vh;padding:22px 18px}.project-modal-body{grid-template-columns:1fr;gap:16px}.project-modal-panel h3{font-size:23px}.project-open{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.project-modal,.project-modal-panel,.project-open{transition:none!important}}
+
+
+/* Project card labels — stronger visual hierarchy */
+.project-meta{
+  align-items:center;
+  gap:12px;
+  padding:16px 19px 13px;
+  color:#7a8295;
+  font-size:10px;
+  letter-spacing:1px;
+}
+.project-meta span:first-child{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:5px 10px;
+  border-left:3px solid var(--gold);
+  background:rgba(195,147,80,.11);
+  color:var(--navy);
+  font-size:12px;
+  line-height:1.35;
+  font-weight:800;
+  letter-spacing:1.05px;
+}
+.project-meta span:last-child{
+  flex:0 0 auto;
+  color:#8b91a0;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.7px;
+}
+.project-info h3{
+  font-size:18px;
+  line-height:1.4;
+  font-weight:700;
+}
+body[dir="rtl"] .project-meta span:first-child{
+  border-left:0;
+  border-right:3px solid var(--gold);
+  font-family:"Cairo",sans-serif;
+  letter-spacing:0;
+  font-size:13px;
+}
+body[dir="rtl"] .project-meta span:last-child{
+  font-family:"DM Sans",sans-serif;
+}
+@media(max-width:650px){
+  .project-meta{padding:14px 15px 11px;gap:8px}
+  .project-meta span:first-child{font-size:11px;min-height:27px;padding:5px 8px;letter-spacing:.65px}
+  body[dir="rtl"] .project-meta span:first-child{font-size:12px;letter-spacing:0}
+  .project-meta span:last-child{font-size:9px}
+  .project-info h3{font-size:16px;line-height:1.45}
+}
