@@ -148,28 +148,25 @@
   function openCompany(card) {
     if (!projectModal || !card) return;
     const companyIndex = Number(card.dataset.company);
-    if (!Number.isInteger(companyIndex) || !companyProfiles[companyIndex]) return;
+    if (!Number.isInteger(companyIndex) || companyIndex < 0 || companyIndex >= companyProfiles.length) return;
     activeCompany = companyIndex;
     renderProjectDetails();
     projectModal.classList.add("is-open");
     projectModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
-    $(".project-modal-close", projectModal).focus();
+    const closeButton = $(".project-modal-close", projectModal);
+    if (closeButton) closeButton.focus();
   }
+  // Delegated click handling supports clicks on any child within each card.
   document.addEventListener("click", event => {
     const target = event.target instanceof Element ? event.target : null;
-    if (!target) return;
-    const card = target.closest("[data-company]");
-    if (card) {
-      if (target.closest("a")) return;
-      openCompany(card);
-    }
+    const card = target && target.closest(".company-card[data-company]");
+    if (card) openCompany(card);
   });
   document.addEventListener("keydown", event => {
-    if (event.key !== "Enter" && event.key !== " ") return;
     const target = event.target instanceof Element ? event.target : null;
-    const card = target?.closest("[data-company]");
-    if (card && target === card) {
+    const card = target && target.closest(".company-card[data-company]");
+    if (card && (event.key === "Enter" || event.key === " ")) {
       event.preventDefault();
       openCompany(card);
     }
