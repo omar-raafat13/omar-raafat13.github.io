@@ -11,13 +11,12 @@
     document.body.dir = lang === "ar" ? "rtl" : "ltr";
     $$("[data-en][data-ar]").forEach(el => { el.textContent = el.dataset[lang]; });
     if (langToggle) langToggle.textContent = lang === "en" ? "العربية" : "English";
-    if (typeof renderProjectDetails === "function" && activeProject !== null) renderProjectDetails();
     try { localStorage.setItem("portfolio-language", lang); } catch (_) {}
   }
   let savedLang = "en";
   try { savedLang = localStorage.getItem("portfolio-language") || "en"; } catch (_) {}
   setLanguage(savedLang);
-  if (langToggle) langToggle.addEventListener("click", () => setLanguage(document.documentElement.lang === "en" ? "ar" : "en"));
+  if (langToggle) langToggle.addEventListener("click", () => { setLanguage(document.documentElement.lang === "en" ? "ar" : "en"); renderProjectDetails(); });
 
 
   const projectDetails = [
