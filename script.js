@@ -10,7 +10,7 @@
   function setLanguage(lang) {
     document.documentElement.lang = lang;
     document.body.dir = lang === "ar" ? "rtl" : "ltr";
-    $$("[data-en][data-ar]").forEach(el => { el.textContent = el.dataset[lang]; });
+    $("[data-en][data-ar]").forEach(el => { el.innerHTML = el.dataset[lang]; });
     if (langToggle) langToggle.textContent = lang === "en" ? "العربية" : "English";
     try { localStorage.setItem("portfolio-language", lang); } catch (_) {}
   }
