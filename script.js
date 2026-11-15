@@ -180,7 +180,7 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const header = $(".site-header");
   const sections = $$("main section");
-  const revealTargets = $$(".hero-copy > *, .hero-visual, .section-kicker, .intro-content h2, .intro-text, .section-heading, .expertise-card, .project-card, .timeline-item, .credential, .contact-inner, .site-footer > *");
+  const revealTargets = $$(".hero-copy > *, .hero-visual, .section-kicker, .intro-content h2, .intro-text, .section-heading, .highlight-card, .expertise-card, .project-card, .timeline-item, .credential, .contact-inner, .site-footer > *");
 
   document.documentElement.classList.add("motion-enabled");
   if (!reduceMotion && "IntersectionObserver" in window) {
