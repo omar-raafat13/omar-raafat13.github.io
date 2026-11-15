@@ -144,7 +144,7 @@
     document.body.classList.add("modal-open");
     $(".project-modal-close", projectModal).focus();
   }
-  $("[data-project]").forEach(card => {
+  $$("[data-project]").forEach(card => {
     card.setAttribute("tabindex", "0");
     card.setAttribute("role", "button");
     card.setAttribute("aria-haspopup", "dialog");
@@ -159,7 +159,7 @@
       }
     });
   });
-  $("[data-modal-close]").forEach(el => el.addEventListener("click", closeProjectModal));
+  $$("[data-modal-close]").forEach(el => el.addEventListener("click", closeProjectModal));
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && projectModal?.classList.contains("is-open")) closeProjectModal();
   });
