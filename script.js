@@ -137,27 +137,40 @@
     activeProject = null;
   }
   function openProject(card) {
-    activeProject = Number(card.dataset.project);
+    if (!projectModal || !card) return;
+    const projectIndex = Number(card.dataset.project);
+    if (!Number.isInteger(projectIndex) || !projectDetails[projectIndex]) return;
+    activeProject = projectIndex;
     renderProjectDetails();
     projectModal.classList.add("is-open");
     projectModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
     $(".project-modal-close", projectModal).focus();
   }
+  // Use delegated events so project cards remain interactive even if their
+  // inner content is updated by the language switch or other page scripts.
+  document.addEventListener("click", event => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target) return;
+    const card = target.closest("[data-project]");
+    if (card) {
+      if (target.closest("a")) return;
+      openProject(card);
+    }
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const target = event.target instanceof Element ? event.target : null;
+    const card = target?.closest("[data-project]");
+    if (card && target === card) {
+      event.preventDefault();
+      openProject(card);
+    }
+  });
   $$("[data-project]").forEach(card => {
     card.setAttribute("tabindex", "0");
     card.setAttribute("role", "button");
     card.setAttribute("aria-haspopup", "dialog");
-    card.addEventListener("click", event => {
-      if (event.target.closest("a")) return;
-      openProject(card);
-    });
-    card.addEventListener("keydown", event => {
-      if ((event.key === "Enter" || event.key === " ") && event.target === card) {
-        event.preventDefault();
-        openProject(card);
-      }
-    });
   });
   $$("[data-modal-close]").forEach(el => el.addEventListener("click", closeProjectModal));
   document.addEventListener("keydown", event => {
