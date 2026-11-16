@@ -528,3 +528,18 @@ body[dir=rtl] .credential-view:hover,body[dir=rtl] .credential-view:focus-visibl
 body[dir=rtl] .credential-view em{font-family:"Cairo",sans-serif}
 @media(max-width:680px){.certificate-viewer{padding:8px}.certificate-viewer-panel{height:90vh;padding:48px 8px 8px}.credential-view em{opacity:1}}
 @media(prefers-reduced-motion:reduce){.certificate-viewer,.credential-view,.credential-view em{transition:none!important}}
+
+
+/* Navigation spacing after adding the Certificates tab */
+@media(min-width:901px){
+  .desktop-nav{gap:clamp(10px,1.15vw,18px)}
+  .desktop-nav a{font-size:11px;white-space:nowrap}
+}
+#credentials{scroll-margin-top:96px}
+.credential-view{display:grid;grid-template-columns:90px minmax(0,1fr);gap:5px 18px;align-items:center}
+.credential-view>b{grid-row:span 2}
+.credential-view>em{grid-column:2}
+@media(max-width:650px){
+  .credentials-layout{grid-template-columns:1fr;gap:28px}
+  .credential-view{grid-template-columns:72px minmax(0,1fr);gap:5px 12px}
+}
