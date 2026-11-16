@@ -265,6 +265,37 @@
   </main>
 
   <footer class="site-footer"><a class="brand footer-brand" href="#home"><span>OR</span><b>عمر رأفت <small>OMAR RAAFAT</small></b></a><p>© <span id="year"></span> عمر رأفت | Omar Raafat. <span data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p><a href="#home" class="back-top" data-en="Back to top ↑" data-ar="العودة للأعلى ↑">Back to top ↑</a></footer>
-  <script src="script.js?v=portfolio-v19"></script>
+  <script>
+(() => {
+  const viewer = document.getElementById('certificate-viewer');
+  const content = document.getElementById('certificate-viewer-content');
+  if (!viewer || !content) return;
+  const base = 'certificates/';
+  const close = () => { viewer.classList.remove('is-open'); viewer.setAttribute('aria-hidden','true'); content.replaceChildren(); document.body.classList.remove('modal-open'); };
+  document.querySelectorAll('.credential-view[data-cert]').forEach(button => {
+    button.addEventListener('click', () => {
+      const file = button.getAttribute('data-cert');
+      const ext = file.split('.').pop().toLowerCase();
+      const url = base + encodeURIComponent(file).replace(/%2F/g,'/');
+      content.replaceChildren();
+      if (ext === 'pdf') {
+        const frame = document.createElement('iframe');
+        frame.src = url + '#toolbar=0&navpanes=0&scrollbar=1';
+        frame.title = button.querySelector('span')?.textContent || 'Certificate preview';
+        frame.setAttribute('loading','lazy');
+        content.appendChild(frame);
+      } else {
+        const img = document.createElement('img');
+        img.src = url; img.alt = button.querySelector('span')?.textContent || 'Certificate';
+        content.appendChild(img);
+      }
+      viewer.classList.add('is-open'); viewer.setAttribute('aria-hidden','false'); document.body.classList.add('modal-open');
+    });
+  });
+  viewer.querySelectorAll('[data-viewer-close]').forEach(el => el.addEventListener('click', close));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && viewer.classList.contains('is-open')) close(); });
+})();
+</script>
+<script src="script.js?v=portfolio-v19"></script>
 </body>
 </html>
